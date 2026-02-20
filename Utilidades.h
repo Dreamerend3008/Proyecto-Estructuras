@@ -7,5 +7,6 @@ using namespace std;
 
 vector<string> parser(const string& linea);
 bool stringDouble(string input);
+string extraerComentario(const string& linea);
 
 #endif
