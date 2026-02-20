@@ -7,5 +7,4 @@ using namespace std;
 
 void procesarComando(const string& comando);
 
-
 #endif

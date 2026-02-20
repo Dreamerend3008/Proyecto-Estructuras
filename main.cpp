@@ -6,7 +6,7 @@ int main() {
     string linea;
     bool running = true;
     while(running){
-        cout<<"$ ";
+        cout << "$ ";
         getline(cin, linea);
         
         if(linea.empty())continue;
