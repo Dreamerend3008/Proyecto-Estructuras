@@ -14,7 +14,11 @@ void agregarMovimiento(vector<string> comandos);
 void agregarAnalisis(vector<string> comandos);
 void agregarElemento(vector<string> comandos);
 void simularComandos(vector<string> comandos);
-void ayuda();
+void ayuda(vector<string> comandos);
+void ubicarElementos(vector<string> comandos);
+void enCuadrante(vector<string> comandos);
+void crearMapa(vector<string> comandos);
+void rutaMasLarga(vector<string> comandos);
 
 
 void procesarComando(const string& input) {
@@ -84,6 +88,11 @@ void ayuda(vector<string> comandos) {
         cout<<"  agregar_elemento - El elemento ha sido agregado exitosamente."<<endl;
         cout<<"  simular_comandos - La simulacion de los comandos deja al robot en la nueva posicion."<<endl;
         cout << "  ayuda - Muestra esta ventana de ayuda." << endl;
+        cout << "  ubicar_elementos - Ubica los elementos en estructura jerárquica." << endl;
+        cout << "  en_cuadrante - Retorna elementos dentro del cuadrante dado." << endl;
+        cout << "  crear_mapa - Crea un mapa de elementos con coeficiente de conectividad." << endl;
+        cout << "  ruta_mas_larga - Encuentra la ruta más larga en el mapa." << endl;
+
     }else{
         if(comandos[1] == "salir") {
             cout << "salir: Termina el programa." << endl;
@@ -103,8 +112,17 @@ void ayuda(vector<string> comandos) {
             cout<<"simular_comandos <coordX> <coordY>: La simulacion de los comandos, a partir de la posicion (coordX, coordY), deja al robot en la nueva posicion (nuevoX,nuevoY)."<<endl;
         }else {
             cout << "Comando no reconocido para ayuda: " << comandos[1] << endl;
-        }
+        }else if(comandos[1] == "ubicar_elementos") {
+            cout << "ubicar_elementos: Ubica los elementos en memoria. No recibe parámetros." << endl;
+        } else if(comandos[1] == "en_cuadrante") {
+            cout << "en_cuadrante <x1> <x2> <y1> <y2>: Retorna elementos en el cuadrante." << endl;
+        } else if(comandos[1] == "crear_mapa") {
+            cout << "crear_mapa <coeficiente>: Crea mapa con coeficiente entre 0 y 1." << endl;
+        } else if(comandos[1] == "ruta_mas_larga") {
+            cout << "ruta_mas_larga: Encuentra la ruta más larga. No recibe parámetros." << endl;
+
     }
+}
 }
 
 void salir() {
@@ -130,7 +148,7 @@ void agregarMovimiento(vector<string> comandos) {
     }
 
     if (comandos[1] == "avanzar") {
-        if (comandos[3]!="cm" && comandos[3]!="dm" && comandos[3]!="m") {
+        if (comandos[3]!="cm" && comandos[3]!="dm" && comandos[3]!="m", && comandos[3]!="km") {
             cout<<"La informacion del movimiento no corresponde a los datos esperados (tipo, magnitud, unidad)."<<endl;
             return;
         }
@@ -145,24 +163,28 @@ void agregarMovimiento(vector<string> comandos) {
 
     cout << "El comando de movimiento ha sido agregado exitosamente." << endl;
 }
-void agregarAnalisis(vector<string> comandos) {
+void agregarAnalisis(vector<string> comandos, const string& lineaOriginal) {
 
-    if (comandos.size()<3 || comandos.size()>4) {
-        cout<<"La informacion del analisis no corresponde a los datos esperados (tipo, objeto, comentario)."<<endl;
+    if (comandos.size() < 3) {
+        cout << "(Formato erróneo) La información del análisis no corresponde a los datos esperados." << endl;
         return;
     }
 
-    if (comandos[1]!="fotografiar" && comandos[1] !="composicion" && comandos[1]!="perforacion") {
-        cout<<"La informacion del analisis no corresponde a los datos esperados (tipo, objeto, comentario)."<<endl;
+    if (comandos[1] != "fotografiar" && comandos[1] != "composicion" && comandos[1] != "perforar") {
+        cout << "(Formato erróneo) La información del análisis no corresponde a los datos esperados." << endl;
         return;
     }
 
-    if (comandos[2]!="roca" && comandos[2]!="crater" && comandos[2]!= "monticulo" && comandos[2]!= "duna") {
-        cout<<"La informacion del analisis no corresponde a los datos esperados (tipo, objeto, comentario)."<<endl;
-        return;
+    // verificar comentario si hay comillas
+    if (lineaOriginal.find('\'') != string::npos) {
+        string comentario = extraerComentario(lineaOriginal);
+        if (comentario.empty()) {
+            cout << "(Formato erróneo) El comentario debe estar entre comillas simples." << endl;
+            return;
+        }
     }
 
-    cout << "El comando de analisis ha sido agregado exitosamente." << endl;
+    cout << "(Resultado exitoso) El comando de análisis ha sido agregado exitosamente." << endl;
 }
 void agregarElemento(vector<string> comandos) {
 
@@ -181,7 +203,7 @@ void agregarElemento(vector<string> comandos) {
         return;
     }
 
-    if (comandos[3]!="cm" && comandos[3]!="dm" && comandos[3]!="m") {
+    if (comandos[3]!="cm" && comandos[3]!="dm" && comandos[3]!="m" && comandos[3]!="km") {
         cout<<"La informacion del elemento no corresponde a los datos esperados (tipo, tamano, unidad, x, y)."<<endl;
         return;
     }
@@ -204,4 +226,54 @@ void simularComandos(vector<string> comandos) {
         return;
     }
      cout<<"La simulacion de los comandos, a partir de la posicion ("<<comandos[1]<<","<<comandos[2]<<"), deja al robot en la nueva posicion (nuevoX,nuevoY)."<<endl;
+}
+void ubicarElementos(vector<string> comandos) {
+    if (comandos.size() != 1) {
+        cout << "El comando ubicar_elementos no recibe parametros." << endl;
+        return;
+     }
+    cout << "Ubicando elementos en memoria... (Pendiente entrega 1)" << endl;
+}
+void enCuadrante(vector<string> comandos) {
+    if (comandos.size() != 5) {
+        cout << "Formato erroneo. Uso: en_cuadrante <x1> <x2> <y1> <y2>" << endl;
+        return;
+    }
+    if (!stringDouble(comandos[1]) || !stringDouble(comandos[2]) || 
+    !stringDouble(comandos[3]) || !stringDouble(comandos[4])) {
+        cout << "Los parametros x1, x2, y1, y2 deben ser numeros reales." << endl;
+        return;
+    }
+    if(stod(comandos[1]) >= stod(comandos[2])){
+        cout << "Las coordenadas deben ser: x1 < x2 " << endl;
+        return;
+    }
+    if(stod(comandos[3]) >= stod(comandos[4])){
+        cout << "Las coordenadas deben ser: y1 < y2 " << endl;
+        return;
+    }
+    cout << "(Pendiente entrega 1) en cuadrante" << endl;
+}
+void crearMapa(vector<string> comandos) {
+    if (comandos.size() != 2) {
+        cout << "(Formato erróneo) Uso: crear_mapa <coeficiente>." << endl;
+        return;
+    }
+    if (!stringDouble(comandos[1])) {
+        cout << "(Formato erróneo) El coeficiente debe ser un número real." << endl;
+        return;
+    }
+    double coef = stod(comandos[1]);
+    if (coef < 0 || coef > 1) {
+        cout << "(Formato erróneo) El coeficiente debe estar entre 0 y 1." << endl;
+        return;
+    }
+    cout << "(Pendiente) crear_mapa." << endl;
+}
+void rutaMasLarga(vector<string> comandos) {
+    if (comandos.size() != 1) {
+        cout << "(Formato erróneo) ruta_mas_larga no recibe parámetros." << endl;
+        return;
+    }
+    cout << "(Pendiente) ruta_mas_larga." << endl;
 }
