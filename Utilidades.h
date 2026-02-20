@@ -6,5 +6,6 @@
 using namespace std;
 
 vector<string> parser(const string& linea);
+bool stringDouble(string input);
 
 #endif

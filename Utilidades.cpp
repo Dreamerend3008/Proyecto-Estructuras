@@ -11,3 +11,12 @@ vector<string> parser(const string& linea) {
 
     return tokens;
 }
+bool stringDouble(string input) {
+    try {
+        stod(input);
+        return true;
+    }
+    catch (std::exception e) {
+        return false;
+    }
+}
