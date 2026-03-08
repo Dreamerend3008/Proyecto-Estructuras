@@ -22,6 +22,16 @@ bool stringDouble(string input) {
         return false;
     }
 }
+string extraerComentario(const string& linea) {
+    // busca el primer ' y el último '
+    int inicio = linea.find('\'');
+    int fin = linea.rfind('\'');
+    if(inicio == string::npos || fin == string::npos || inicio == fin) {
+        return "";
+    }
+    return linea.substr(inicio + 1, fin - inicio - 1);
+}
+
 
 double convertirDistancia(double magnitud, std::string unidad){
     if(unidad == "cm") return magnitud * 0.01;

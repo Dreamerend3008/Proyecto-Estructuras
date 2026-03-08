@@ -6,11 +6,14 @@ int main() {
     string linea;
     bool running = true;
     while(running){
-        cout<<"$ ";
+        cout << "$ ";
         getline(cin, linea);
         
         if(linea.empty())continue;
-
+        if(linea == "exit"){
+            running = false;
+            continue;
+        }
         procesarComando(linea);
     } 
     return 0;
