@@ -3,8 +3,12 @@
 
 #include "ProcesadorComandos.h"
 #include "Utilidades.h"
+#include "Datos.h"
+#include "Simulacion.h"
 
 using namespace std;
+
+static Estado estado;
 
 void salir();
 void cargarComandos(vector<string> comandos);
@@ -59,32 +63,47 @@ void procesarComando(const string& input) {
         cout << "(Error) Comando no reconocido: " << comandos[0] << ". Use 'ayuda' para ver los comandos disponibles." << endl;
     }
 }
-void cargarComandos(vector<string> comandos) {
-    // uso cargar_comandos <nombre_archivo>
-    if(comandos.size() != 2 || comandos[1].empty()) {
-        // unico tamano permitido es 2, el comando y el nombre del archivo
+void cargarComandos(vector<string> tokens) {
+    if (tokens.size() != 2) {
         cout << "Uso: cargar_comandos <nombre_archivo>" << endl;
         return;
     }
-    cout << "Cargando comandos desde el archivo: " << comandos[1] << endl;
+    int r = ::cargarComandos(estado, tokens[1]);
+    if (r == -1)
+        cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
+    else if (r == 0)
+        cout << "(Archivo vacío) " << tokens[1] << " no contiene comandos." << endl;
+    else
+        cout << "(Resultado exitoso) " << r << " comandos cargados correctamente desde " << tokens[1] << "." << endl;
 }
-void cargarElementos(vector<string> comandos) {
-    // uso cargar_elementos <nombre_archivo>
-    if(comandos.size() != 2 || comandos[1].empty()) {
-        // unico tamano permitido es 2, el comando y el nombre del archivo
+
+void cargarElementos(vector<string> tokens) {
+    if (tokens.size() != 2) {
         cout << "Uso: cargar_elementos <nombre_archivo>" << endl;
         return;
     }
-    cout << "Cargando elementos desde el archivo: " << comandos[1] << endl;
+    int r = ::cargarElementos(estado, tokens[1]);
+    if (r == -1)
+        cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
+    else if (r == 0)
+        cout << "(Archivo vacío) " << tokens[1] << " no contiene elementos." << endl;
+    else
+        cout << "(Resultado exitoso) " << r << " elementos cargados correctamente desde " << tokens[1] << "." << endl;
 }
-void guardar(vector<string> comandos) {
-    // uso guardar <comandos|elementos> <nombre_archivo>
-    if(comandos.size() != 3 || comandos[1].empty() || comandos[2].empty() || (comandos[1] != "comandos" && comandos[1] != "elementos")) {
-        // unico tamano permitido es 3, el comando, el tipo de dato y el nombre del archivo
+
+void guardar(vector<string> tokens) {
+    if (tokens.size() != 3 || (tokens[1] != "comandos" && tokens[1] != "elementos")) {
         cout << "Uso: guardar <comandos|elementos> <nombre_archivo>" << endl;
         return;
     }
-    cout << "Guardando " << comandos[1] << " en el archivo: " << comandos[2] << endl;
+    string tipo = (tokens[1] == "comandos") ? "COMANDOS" : "ELEMENTOS";
+    int r = ::guardar(estado, tipo, tokens[2]);
+    if (r == 0)
+        cout << "(No hay información) La información requerida no está almacenada en memoria." << endl;
+    else if (r == -1)
+        cout << "(Problemas en archivo) Error guardando en " << tokens[2] << "." << endl;
+    else
+        cout << "(Escritura exitosa) La información ha sido guardada en " << tokens[2] << "." << endl;
 }
 
 void ayuda(vector<string> comandos) {

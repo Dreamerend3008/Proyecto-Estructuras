@@ -2,7 +2,7 @@
 #include "Utilidades.h"
 #include <cmath>
 using namespace std;
-bool agregarMovimiento(std::queue<Comando>& comandos,
+int agregarMovimiento(std::queue<Comando>& comandos,
                      const std::string tipoMovimiento,
                      double magnitud,
                      const std::string& unidad){
@@ -14,25 +14,25 @@ bool agregarMovimiento(std::queue<Comando>& comandos,
     c.comentario = "";
     if(tipoMovimiento == "AVANZAR"){
         double convertido = convertirDistancia(magnitud,unidad);
-        if(convertido == -1)return false;
+        if(convertido == -1)return -1;
         c.tipoMovimiento = AVANZAR;
         c.magnitud = convertido;
     }else if(tipoMovimiento == "GIRAR"){
         double convertido = convertirAngulo(magnitud, unidad);
-        if(convertido == -1)return false;
+        if(convertido == -1)return -1;
         c.tipoMovimiento = GIRAR;
         c.magnitud = convertido;
-    }else{ return false; }
+    }else{ return -1; }
     comandos.push(c);
-    return true;
+    return 1;
 } 
 
-bool agregarAnalisis(std::queue<Comando>& comandos,
+int agregarAnalisis(std::queue<Comando>& comandos,
                     const std::string& tipoAnalisis,
                     const std::string& objeto,
                     const std::string& comentario = ""){
     //
-    if (objeto.empty()) return false;
+    if (objeto.empty()) return -1;
 
     Comando c;
     c.tipoComando = ANALISIS;
@@ -44,20 +44,20 @@ bool agregarAnalisis(std::queue<Comando>& comandos,
     if      (tipoAnalisis == "FOTOGRAFIAR") c.tipoAnalisis = FOTOGRAFIAR;
     else if (tipoAnalisis == "COMPOSICION") c.tipoAnalisis = COMPOSICION;
     else if (tipoAnalisis == "PERFORAR")    c.tipoAnalisis = PERFORAR;
-    else return false;
+    else return -1;
 
     comandos.push(c);
-    return true;
+    return 1;
 }
 
-bool agregarElemento(std::vector<Elemento>& elementos,
+int agregarElemento(std::vector<Elemento>& elementos,
                      std::string tipoElem,
                      double tamanio,
                      std::string unidad,
                      double x,
                      double y) {
     double convertido = convertirDistancia(tamanio, unidad); // el enunciado menciona que las unidades de tamanio son las mismas que avanzar
-    if (convertido < 0) return false;
+    if (convertido < 0) return -1;
     Elemento e;
     e.tamanio = convertido;
     e.unidad = unidad;
@@ -68,13 +68,13 @@ bool agregarElemento(std::vector<Elemento>& elementos,
     else if (tipoElem == "CRATER")    e.tipo = CRATER;
     else if (tipoElem == "MONTICULO") e.tipo = MONTICULO;
     else if (tipoElem == "DUNA")      e.tipo = DUNA;
-    else return false;
+    else return -1;
 
     elementos.push_back(e);
-    return true;
+    return 1;
 }
 
-bool simularComandos(std::queue<Comando> comandos,
+int simularComandos(std::queue<Comando> comandos,
                      double x, double y,
                      double &nuevo_x, double&nuevo_y){
     double angulo = 0.0;
@@ -93,7 +93,7 @@ bool simularComandos(std::queue<Comando> comandos,
     }
     nuevo_x = x;
     nuevo_y = y;
-    return true;
+    return 1;
 }
 
 
