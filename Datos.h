@@ -12,8 +12,8 @@ struct Estado {
     std::vector<Elemento> listaElementos;
 };
 
-int cargarComandos(Estado& estado, const std::string& nombreArchivo);
-int cargarElementos(Estado& estado, const std::string& nombreArchivo);
-int guardar(Estado& estado, const std::string& tipo, const std::string& nombreArchivo);
+int cmdCargarComandos(Estado& estado, const std::string& nombreArchivo);
+int cmdCargarElementos(Estado& estado, const std::string& nombreArchivo);
+int cmdGuardar(Estado& estado, const std::string& tipo, const std::string& nombreArchivo);
 
 #endif

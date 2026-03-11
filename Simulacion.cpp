@@ -30,7 +30,7 @@ int agregarMovimiento(std::queue<Comando>& comandos,
 int agregarAnalisis(std::queue<Comando>& comandos,
                     const std::string& tipoAnalisis,
                     const std::string& objeto,
-                    const std::string& comentario = ""){
+                    const std::string& comentario){
     //
     if (objeto.empty()) return -1;
 

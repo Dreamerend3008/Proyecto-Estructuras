@@ -68,7 +68,7 @@ void cargarComandos(vector<string> tokens) {
         cout << "Uso: cargar_comandos <nombre_archivo>" << endl;
         return;
     }
-    int r = ::cargarComandos(estado, tokens[1]);
+    int r = cmdCargarComandos(estado, tokens[1]);
     if (r == -1)
         cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
     else if (r == 0)
@@ -82,7 +82,7 @@ void cargarElementos(vector<string> tokens) {
         cout << "Uso: cargar_elementos <nombre_archivo>" << endl;
         return;
     }
-    int r = ::cargarElementos(estado, tokens[1]);
+    int r = cmdCargarElementos(estado, tokens[1]);
     if (r == -1)
         cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
     else if (r == 0)
@@ -97,7 +97,7 @@ void guardar(vector<string> tokens) {
         return;
     }
     string tipo = (tokens[1] == "comandos") ? "COMANDOS" : "ELEMENTOS";
-    int r = ::guardar(estado, tipo, tokens[2]);
+    int r = cmdGuardar(estado, tipo, tokens[2]);
     if (r == 0)
         cout << "(No hay información) La información requerida no está almacenada en memoria." << endl;
     else if (r == -1)
@@ -205,7 +205,7 @@ void agregarAnalisis(vector<string> comandos, const string& lineaOriginal) {
     }
 
     // verificar comentario si hay comillas
-    if (lineaOriginal.find('\'')) {
+    if (lineaOriginal.find('\'') != std::string::npos) { // verifica si la ultima posicion es el nulo de string
         string comentario = extraerComentario(lineaOriginal);
         if (comentario.empty()) {
             cout << "(Formato erroneo) El comentario debe estar entre comillas simples." << endl;

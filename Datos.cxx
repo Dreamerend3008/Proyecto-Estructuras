@@ -2,7 +2,7 @@
 #include "Utilidades.h"
 #include <fstream>
 
-int cargarComandos(Estado& estado, const std::string& nombreArchivo) {
+int cmdCargarComandos(Estado& estado, const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) return -1;
 
@@ -31,13 +31,13 @@ int cargarComandos(Estado& estado, const std::string& nombreArchivo) {
                     double dist = convertirDistancia(std::stod(partes[1]), partes[2]);
                     if (dist < 0) continue; // unidad invalida
                     cmd.magnitud = dist;
-                    cmd.unidad = "M";
+                    cmd.unidad = "m";
                 } else {
                     cmd.tipoMovimiento = GIRAR;
                     double ang = convertirAngulo(std::stod(partes[1]), partes[2]);
                     if (ang < 0) continue; // unidad invalida
                     cmd.magnitud = ang;
-                    cmd.unidad = "GRD";
+                    cmd.unidad = "grd";
                 }
             } catch (...) {
                 continue; // stod fallo
@@ -64,7 +64,7 @@ int cargarComandos(Estado& estado, const std::string& nombreArchivo) {
     return n; 
 }
 
-int cargarElementos(Estado& estado, const std::string& nombreArchivo) {
+int cmdCargarElementos(Estado& estado, const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) return -1;
 
@@ -83,7 +83,7 @@ int cargarElementos(Estado& estado, const std::string& nombreArchivo) {
             double tam = convertirDistancia(std::stod(partes[1]), partes[2]);
             if (tam < 0) continue; // unidad invalida
             el.tamanio = tam;
-            el.unidad = "M";
+            el.unidad = "m";
             el.x = std::stod(partes[3]);
             el.y = std::stod(partes[4]);
         } catch (...) {
@@ -103,7 +103,7 @@ int cargarElementos(Estado& estado, const std::string& nombreArchivo) {
     return n;
 }
 
-int guardar(Estado& estado, const std::string& tipo, const std::string& nombreArchivo) {
+int cmdGuardar(Estado& estado, const std::string& tipo, const std::string& nombreArchivo) {
 
     if (tipo == "COMANDOS" && estado.colaComandos.empty()) return 0;
     if (tipo == "ELEMENTOS" && estado.listaElementos.empty()) return 0;

@@ -18,7 +18,7 @@ bool stringDouble(string input) {
         stod(input);
         return true;
     }
-    catch (std::exception e) {
+    catch (const std::exception e) {
         return false;
     }
 }
