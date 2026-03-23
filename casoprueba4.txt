@@ -1,0 +1,9 @@
+avanzar 10 cm
+fotografiar crater 'punto 1'
+girar 30 grd
+composicion suelo 'arena'
+avanzar 15 cm
+perforar roca
+girar 45 grd
+avanzar 20 cm
+fotografiar duna 'sector este'

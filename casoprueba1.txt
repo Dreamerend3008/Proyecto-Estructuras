@@ -1,0 +1,7 @@
+avanzar 10 cm
+girar 30 grd
+avanzar 15 cm
+girar 45 grd
+avanzar 20 cm
+girar 90 grd
+avanzar 5 cm
