@@ -5,7 +5,7 @@
 #include "Utilidades.h"
 #include "Datos.h"
 #include "Simulacion.h"
-
+#include "QuadTree.h"
 using namespace std;
 
 static Estado estado;
@@ -86,7 +86,8 @@ void cargarElementos(vector<string> tokens) {
     if (r == -1)
         cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
     else if (r == 0)
-        cout << "(Archivo vacío) " << tokens[1] << " no contiene elementos." << endl; else
+        cout << "(Archivo vacío) " << tokens[1] << " no contiene elementos." << endl;
+    else
         cout << "(Resultado exitoso) " << r << " elementos cargados correctamente desde " << tokens[1] << "." << endl;
 }
 
@@ -95,7 +96,7 @@ void guardar(vector<string> tokens) {
         cout << "Uso: guardar <comandos|elementos> <nombre_archivo>" << endl;
         return;
     }
-    string tipo = tokens[1];
+    string tipo = (tokens[1] == "comandos") ? "COMANDOS" : "ELEMENTOS";
     int r = ::guardar(estado, tipo, tokens[2]);
     if (r == 0)
         cout << "(No hay información) La información requerida no está almacenada en memoria." << endl;
@@ -270,12 +271,6 @@ void simularComandos(vector<string> comandos) {
         cout << "(Formato erroneo) Las coordenadas coordX y coordY deben ser numeros reales." << endl;
         return;
     }
-
-    if(estado.colaComandos.empty()){
-        cout << "(No hay informacion) la informacion requerida no esta almacenada en memoria." << endl;
-        return;
-    }
-
     double nuevoX;
     double nuevoY;
     int r= ::simularComandos(estado.colaComandos,stod(comandos[1]),stod(comandos[2]),nuevoX,nuevoY);
@@ -286,6 +281,13 @@ void ubicarElementos(vector<string> comandos) {
         cout << "Uso: ubicar_elementos" << endl;
         return;
      }
+    if (estado.listaElementos.empty()){
+        cout<<"La información requerida no está almacenada en memoria"<<endl;
+        return;
+    }
+    else{
+    estado.arbol = QuadTree(estado.listaElementos,3);//se le da capacidad de 3 pero podria tener 1 o cualquier otro numero
+    }
     cout << "(Resultado exitoso) Ubicando elementos en memoria... (Pendiente entrega 1)" << endl;
 }
 void enCuadrante(vector<string> comandos) {
@@ -306,7 +308,12 @@ void enCuadrante(vector<string> comandos) {
         cout << "(Formato erroneo) Las coordenadas deben cumplir: y1 < y2." << endl;
         return;
     }
-    cout << "(Resultado exitoso) Elementos en cuadrante (Pendiente entrega 1)." << endl;
+    std::vector<Elemento> lista = estado.arbol.en_cuadrante(stod(comandos[1]),stod(comandos[2]),stod(comandos[3]),stod(comandos[4]));
+    cout << "(Resultado exitoso) Los elementos ubicados en cuadrante solicitado son: "<< lista.size() << endl;
+    const std::string nombres[] = {"Roca", "Crater", "Monticulo", "Duna"};// necesitamos pasar de numero a la palabra
+    for(std::vector<Elemento>::iterator it = lista.begin();it!= lista.end();it++){
+        std::cout<<nombres[it->tipo]<<" " <<"tamanio "<<it->tamanio<<" ("<<it->x<<","<<it->y<<")"<<std::endl;
+    }
 }
 void crearMapa(vector<string> comandos) {
     if (comandos.size() != 2) {

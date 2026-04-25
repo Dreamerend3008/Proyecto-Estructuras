@@ -10,6 +10,7 @@ struct Elemento {
     std::string unidad;
     double x;
     double y;
+    bool operator==(Elemento& elemento);
 };
 
 #endif
