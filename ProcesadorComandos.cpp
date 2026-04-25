@@ -86,8 +86,7 @@ void cargarElementos(vector<string> tokens) {
     if (r == -1)
         cout << "(Archivo erróneo) " << tokens[1] << " no se encuentra o no puede leerse." << endl;
     else if (r == 0)
-        cout << "(Archivo vacío) " << tokens[1] << " no contiene elementos." << endl;
-    else
+        cout << "(Archivo vacío) " << tokens[1] << " no contiene elementos." << endl; else
         cout << "(Resultado exitoso) " << r << " elementos cargados correctamente desde " << tokens[1] << "." << endl;
 }
 
@@ -96,7 +95,7 @@ void guardar(vector<string> tokens) {
         cout << "Uso: guardar <comandos|elementos> <nombre_archivo>" << endl;
         return;
     }
-    string tipo = (tokens[1] == "comandos") ? "COMANDOS" : "ELEMENTOS";
+    string tipo = tokens[1];
     int r = ::guardar(estado, tipo, tokens[2]);
     if (r == 0)
         cout << "(No hay información) La información requerida no está almacenada en memoria." << endl;
@@ -271,6 +270,12 @@ void simularComandos(vector<string> comandos) {
         cout << "(Formato erroneo) Las coordenadas coordX y coordY deben ser numeros reales." << endl;
         return;
     }
+
+    if(estado.colaComandos.empty()){
+        cout << "(No hay informacion) la informacion requerida no esta almacenada en memoria." << endl;
+        return;
+    }
+
     double nuevoX;
     double nuevoY;
     int r= ::simularComandos(estado.colaComandos,stod(comandos[1]),stod(comandos[2]),nuevoX,nuevoY);

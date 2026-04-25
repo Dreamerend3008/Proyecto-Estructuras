@@ -117,7 +117,12 @@ int guardar(Estado& estado, const std::string& tipo, const std::string& nombreAr
             Comando cmd = copia.front(); copia.pop();
             if (cmd.tipoComando == MOVIMIENTO) {
                 std::string t = (cmd.tipoMovimiento == AVANZAR) ? "avanzar" : "girar";
-                archivo << t << " " << cmd.magnitud << " " << cmd.unidad << "\n";
+                // Persist in units the loader can read: metros for avanzar, grados para girar
+                if (cmd.tipoMovimiento == AVANZAR) {
+                    archivo << t << " " << cmd.magnitud << " m\n";
+                } else {
+                    archivo << t << " " << cmd.magnitud << " grd\n";
+                }
             } else {
                 std::string t;
                 if      (cmd.tipoAnalisis == FOTOGRAFIAR) t = "fotografiar";
@@ -135,7 +140,7 @@ int guardar(Estado& estado, const std::string& tipo, const std::string& nombreAr
                 else if (el.tipo == CRATER)    t = "crater";
                 else if (el.tipo == MONTICULO) t = "monticulo";
                 else                            t = "duna";
-                archivo << t << " " << el.tamanio << " M "
+                archivo << t << " " << el.tamanio << " m "
                     << el.x << " " << el.y << "\n";
         }
     }
