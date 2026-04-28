@@ -96,7 +96,7 @@ void guardar(vector<string> tokens) {
         cout << "Uso: guardar <comandos|elementos> <nombre_archivo>" << endl;
         return;
     }
-    string tipo = (tokens[1] == "comandos") ? "COMANDOS" : "ELEMENTOS";
+    string tipo = (tokens[1] == "comandos") ? "comandos" : "elementos";
     int r = ::guardar(estado, tipo, tokens[2]);
     if (r == 0)
         cout << "(No hay información) La información requerida no está almacenada en memoria." << endl;
@@ -286,9 +286,9 @@ void ubicarElementos(vector<string> comandos) {
         return;
     }
     else{
-    estado.arbol = QuadTree(estado.listaElementos,3);//se le da capacidad de 3 pero podria tener 1 o cualquier otro numero
+        estado.arbol = QuadTree(estado.listaElementos,3);//se le da capacidad de 3 pero podria tener 1 o cualquier otro numero
     }
-    cout << "(Resultado exitoso) Ubicando elementos en memoria... (Pendiente entrega 1)" << endl;
+    cout << "(Resultado exitoso) Ubicando elementos en memoria" << endl;
 }
 void enCuadrante(vector<string> comandos) {
     if (comandos.size() != 5) {
