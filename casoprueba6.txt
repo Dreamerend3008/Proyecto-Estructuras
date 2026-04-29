@@ -1,0 +1,4 @@
+roca 1 m 2 2
+crater 1 m 4 4
+duna 1 m 6 6
+monticulo 1 m 2 6
