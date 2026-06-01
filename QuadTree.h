@@ -11,6 +11,7 @@ class QuadTree{
         QuadTree();
         std::vector<Elemento> en_cuadrante(double x1, double x2, double y1, double y2, Rectangulo* rec);//recursiva
         std::vector<Elemento> en_cuadrante(double x1, double x2, double y1, double y2);
+        std::vector<Elemento> n_vecinos(Elemento elemento,int n);
 };
 
 #endif

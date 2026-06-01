@@ -7,11 +7,13 @@
 #include "Comando.h"
 #include "Elemento.h"
 #include "QuadTree.h"
+#include "Grafo.h"
 
 struct Estado {
     std::queue<Comando>   colaComandos;
     std::vector<Elemento> listaElementos;
     QuadTree arbol;
+    Grafo grafo;
 };
 
 int cargarComandos(Estado& estado, const std::string& nombreArchivo);

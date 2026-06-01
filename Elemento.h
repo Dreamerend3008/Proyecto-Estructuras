@@ -10,7 +10,9 @@ struct Elemento {
     std::string unidad;
     double x;
     double y;
-    bool operator==(Elemento& elemento);
+    bool operator==(const Elemento& elemento) const;
+    bool operator<(const Elemento& elemento) const;
+    std::string info();
 };
 
 #endif

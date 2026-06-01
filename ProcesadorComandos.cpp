@@ -6,6 +6,8 @@
 #include "Datos.h"
 #include "Simulacion.h"
 #include "QuadTree.h"
+#include "Grafo.h"
+#include <cmath>
 using namespace std;
 
 static Estado estado;
@@ -329,12 +331,20 @@ void crearMapa(vector<string> comandos) {
         cout << "(Formato erroneo) El coeficiente debe estar entre 0 y 1." << endl;
         return;
     }
-    cout << "(Resultado exitoso) Mapa creado (Pendiente entrega 2)." << endl;
+    if(estado.listaElementos.empty()){
+        cout<<"La lista de elementos esta vacia"<<endl;
+    }
+    else{
+    estado.grafo = Grafo(QuadTree(estado.listaElementos,3),estado.listaElementos, std::floor(stod(comandos[1])*estado.listaElementos.size()));
+    cout << "(Resultado exitoso) Mapa creado" << endl;
+    }
 }
 void rutaMasLarga(vector<string> comandos) {
     if (comandos.size() != 1) {
         cout << "Uso: ruta_mas_larga" << endl;
         return;
     }
-    cout << "(Resultado exitoso) Ruta mas larga encontrada (Pendiente entrega 2)." << endl;
+
+    cout << "(Resultado exitoso) Ruta mas larga encontrada" << endl;
+    estado.grafo.ruta_mas_larga();
 }

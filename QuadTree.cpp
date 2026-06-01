@@ -1,5 +1,7 @@
 #include "QuadTree.h"
 #include <iostream>
+#include <algorithm>
+#include <cmath>
 QuadTree::QuadTree(std::vector<Elemento> elementos,int capacidad){
     // primero obtenemos el maximo en x y y , el minimo en x y y de los elementos para dar dar el espacio inicial
     double maxX, maxY, minX, minY;
@@ -51,3 +53,28 @@ std::vector<Elemento> QuadTree::en_cuadrante(double x1, double x2, double y1, do
     return this->en_cuadrante(x1,x2,y1,y2,this->espacio);
 }
 
+std::vector<Elemento> QuadTree::n_vecinos(Elemento elemento,int n){
+    std::vector<Elemento> vecinos;
+    int amplitud = 1;
+    while(vecinos.size()<=n){
+        vecinos = this->en_cuadrante(elemento.x+-amplitud,elemento.x+amplitud,
+                                    elemento.y-amplitud,elemento.y+amplitud);
+        amplitud *= 2;
+    }// se obtienen un numero k> n de elementos cercanos al elemento central
+    std::sort(vecinos.begin(), vecinos.end(),//se le da una operacion personalizada al sort 
+        [&elemento](const Elemento& a, const Elemento& b) {
+
+            double da = std::sqrt(
+                (a.x - elemento.x) * (a.x - elemento.x) +
+                (a.y - elemento.y) * (a.y - elemento.y));
+
+            double db = std::sqrt(
+                (b.x - elemento.x) * (b.x - elemento.x) +
+                (b.y - elemento.y) * (b.y - elemento.y));
+
+            return da < db;
+        });
+    vecinos.erase(vecinos.begin());//eliminar el elemento en si que tiene distancia 0 
+    vecinos.resize(n);//quedarnos con los n elementos
+    return vecinos;
+}
