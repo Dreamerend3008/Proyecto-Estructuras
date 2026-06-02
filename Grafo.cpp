@@ -7,13 +7,16 @@
 Grafo::Grafo(QuadTree arbol, std::vector<Elemento> elementos, int n){
     // Guardar copia de la lista de elementos en el grafo
     this->elementos = elementos;
+    std::map<Elemento,bool> visitado;
     for(const auto& e : elementos) {
         std::vector<Elemento> vecinos = arbol.n_vecinos(e,n);
         for(const auto& v : vecinos) {
             double dx = e.x - v.x; //distancias en x & y
             double dy = e.y - v.y;
             double dist = sqrt(dx*dx + dy*dy);// se usa distancia euclidiana
+            if(visitado[v]) continue; //si el vecino ya fue visitado, no se agrega la arista
             ady[e].push_back({dist,v});
+            visitado[e] = true; //marcar el elemento actual como visitado para evitar agregar aristas duplicadas
         }
     }
     // Asegurar que todos los nodos sin vecinos también existen en la lista de adyacencia
@@ -23,21 +26,21 @@ Grafo::Grafo(QuadTree arbol, std::vector<Elemento> elementos, int n){
 }
 void Grafo::dijkstra(Elemento origen, std::map<Elemento, double>& dist, std::map<Elemento,Elemento>& previo){
     for(const auto& e : elementos){
-        dist[e] = std::numeric_limits<double>::infinity();//poner las distancias iniciales en infinito
+        dist[e] = -std::numeric_limits<double>::infinity();//poner las distancias iniciales en infinito
     }
     dist[origen] = 0;
-    std::priority_queue<std::pair<double,Elemento>,std::vector<std::pair<double,Elemento>>,std::greater<std::pair<double,Elemento>>> pq;
+    std::priority_queue<std::pair<double,Elemento>,std::vector<std::pair<double,Elemento>>> pq;
     pq.push({0,origen});
     while(!pq.empty()){
         Elemento actual = pq.top().second;
         double distancia_actual = pq.top().first;
         pq.pop();
-        if(distancia_actual > dist[actual]) continue;
+        if(distancia_actual < dist[actual]) continue;
         for(const auto& vecino : ady[actual]){
             double peso = vecino.first;
             Elemento siguiente = vecino.second;
             double nueva = distancia_actual + peso;
-            if(nueva < dist[siguiente]){
+            if(nueva > dist[siguiente]){
                 dist[siguiente] = nueva; 
                 previo[siguiente] = actual; //se guardan los siguientes en el mapa de previo para reconstruir la ruta despues
                 pq.push({nueva,siguiente});
@@ -46,10 +49,10 @@ void Grafo::dijkstra(Elemento origen, std::map<Elemento, double>& dist, std::map
     }
 }
 Elemento Grafo::nodo_mas_lejano(std::map<Elemento,double>& dist){
-    double mayor = -1;
+    double mayor = -std::numeric_limits<double>::infinity();
     Elemento resultado;
     for(const auto& par : dist){
-        if(par.second != std::numeric_limits<double>::infinity() && par.second > mayor){//se busca la distancia finita mas larga
+        if(par.second != -std::numeric_limits<double>::infinity() && par.second > mayor){//se busca la distancia finita mas larga
             mayor = par.second;
             resultado = par.first;
         }
@@ -76,7 +79,7 @@ void Grafo::ruta_mas_larga(){
         std::cout<< "(No hay información) "<< "El mapa no ha sido generado todavía\n";
         return;
     }
-    double mayor = 0;
+    double mayor = -std::numeric_limits<double>::infinity();
     Elemento inicio_final;
     Elemento destino_final;
     std::vector<Elemento> mejor_ruta;
